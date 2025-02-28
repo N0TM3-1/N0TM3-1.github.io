@@ -1,13 +1,24 @@
+/* Dark Theme Color Palette */
+:root {
+    --primary-color: #1a1a1a; /* Dark Gray */
+    --secondary-color: #4a4a4a; /* Medium Gray */
+    --accent-color: #e74c3c; /* Red */
+    --background-color: #121212; /* Very Dark Gray */
+    --text-color: #f4f4f4; /* Light Gray */
+    --button-hover-color: #333333; /* Darker Gray */
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 header {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     padding: 1rem;
     text-align: center;
 }
@@ -21,11 +32,34 @@ section {
 }
 
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color);
     text-align: center;
     padding: 1rem;
     position: fixed;
     width: 100%;
     bottom: 0;
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 8px; /* Round the corners */
+    font-family: "Jersey 10", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #fff;
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
 }
