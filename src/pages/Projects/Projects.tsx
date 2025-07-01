@@ -16,7 +16,7 @@ function Projects() {
 
   const apiUrl =
     "https://tachmiwlktzvnwsxngne.supabase.co/rest/v1/Projects?select=*";
-  const apiKey = process.env.SUPABASE_ANON_KEY;
+  const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   useEffect(() => {
     const fetchProjects = async () => {
