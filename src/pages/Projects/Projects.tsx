@@ -14,10 +14,18 @@ function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const apiUrl =
+    "https://tachmiwlktzvnwsxngne.supabase.co/rest/v1/Projects?select=*";
+  const apiKey = process.env.SUPABASE_ANON_KEY;
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch("https://your-api-endpoint.com/projects");
+        const response = await fetch(apiUrl, {
+          headers: {
+            apikey: apiKey || "", // fallback to empty string to avoid undefined
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -57,7 +65,7 @@ function Projects() {
     return <div className="text-center pt-10 text-red-500">Error: {error}</div>;
   }
 
-  const projectCards = (projectsToDisplay ?? []).map((project, index) => (
+  const projectCards = projectsToDisplay.map((project, index) => (
     <ProjectCard
       key={index}
       id={project.id}
@@ -70,7 +78,7 @@ function Projects() {
   return (
     <>
       <h1 className="text-4xl text-center pb-10 pt-10">My projects</h1>
-      <ProjectContainer children={projectCards} />
+      <ProjectContainer>{projectCards}</ProjectContainer>
     </>
   );
 }
