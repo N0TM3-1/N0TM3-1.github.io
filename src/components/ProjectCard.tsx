@@ -11,7 +11,7 @@ function ProjectCard({
   id: number;
   title: string;
   description: string;
-  status: string;
+  status: boolean;
 }) {
   return (
     <div onClick={() => test(id)}>
