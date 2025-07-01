@@ -7,7 +7,7 @@ function Header() {
         </h1>
       </div>
       <div className="flex justify-between items-center px-4 py-2">
-        <a href="./home" className="px-5">
+        <a href="./" className="px-5">
           Home
         </a>
         <a href="./about" className="px-5">
