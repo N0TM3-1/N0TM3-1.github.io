@@ -44,8 +44,6 @@ function Projects() {
 
     fetchProjects();
   }, []);
-
-  // Fallback data (your existing projects array)
   const fallbackProjects = [
     {
       id: 1,
