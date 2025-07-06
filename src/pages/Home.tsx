@@ -13,7 +13,7 @@ function Home() {
           Hi! I'm <span className="text-cyan-600">Dumitru Copăceanu!</span>
         </h1>
         <p className="text-xl md:text-2xl lg:text-3xl mb-8 text-gray-300">
-          I'm jack of all trades, master of none.
+          I'm a teenager passionate about all things tech.
         </p>
         <button
           onClick={scrollToAbout}
