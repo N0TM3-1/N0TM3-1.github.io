@@ -1,6 +1,7 @@
 import ProjectContainer from "../../components/ProjectContainer";
 import ProjectCard from "../../components/ProjectCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 type Project = {
   id: number;
@@ -14,26 +15,56 @@ function Projects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const apiUrl =
-    "https://tachmiwlktzvnwsxngne.supabase.co/rest/v1/Projects?select=*";
-  const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const supabase = useMemo(() => {
+    const supabaseUrl = "https://tachmiwlktzvnwsxngne.supabase.co";
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    console.log("Environment check:", {
+      hasKey: !!supabaseKey,
+      keyLength: supabaseKey?.length,
+      keyStart: supabaseKey?.substring(0, 20) + "...",
+    });
+
+    if (!supabaseKey) {
+      console.warn(
+        "VITE_SUPABASE_ANON_KEY is not defined - using fallback projects"
+      );
+      return null;
+    }
+
+    return createClient(supabaseUrl, supabaseKey);
+  }, []);
 
   useEffect(() => {
     const fetchProjects = async () => {
+      console.log("Starting to fetch projects...");
+
+      // If no Supabase key, use fallback projects immediately
+      if (!supabase) {
+        console.log("No Supabase client, using fallback projects");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch(apiUrl, {
-          headers: {
-            apikey: apiKey || "", // fallback to empty string to avoid undefined
-          },
+        console.log("Fetching from Supabase...");
+        const { data, error } = await supabase.from("Projects").select("*");
+
+        console.log("Supabase response:", {
+          hasData: !!data,
+          dataLength: data?.length,
+          error: error?.message,
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (error) {
+          console.error("Supabase error:", error);
+          setError(error.message);
+        } else {
+          console.log("Projects loaded successfully:", data);
+          setProjects(Array.isArray(data) ? data : []);
         }
-
-        const data = await response.json();
-        setProjects(Array.isArray(data) ? data : []);
       } catch (err) {
+        console.error("Fetch error:", err);
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"
         );
@@ -43,7 +74,8 @@ function Projects() {
     };
 
     fetchProjects();
-  }, []);
+  }, [supabase]);
+
   const fallbackProjects = [
     {
       id: 1,
@@ -51,16 +83,63 @@ function Projects() {
       description: "A tiny game about blowing balloons",
       status: true,
     },
+    {
+      id: 2,
+      title: "Portfolio Website",
+      description: "This personal portfolio built with React and TypeScript",
+      status: true,
+    },
+    {
+      id: 3,
+      title: "Future Project",
+      description: "An exciting project currently in development",
+      status: false,
+    },
   ];
 
   const projectsToDisplay = projects.length > 0 ? projects : fallbackProjects;
 
+  console.log("Component render state:", {
+    loading,
+    error,
+    projectsCount: projectsToDisplay.length,
+    usingFallback: projects.length === 0,
+  });
+
   if (loading) {
-    return <div className="text-center pt-10">Loading projects...</div>;
+    return (
+      <div className="text-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+        <p className="mt-4 text-gray-300">Loading projects...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-center pt-10 text-red-500">Error: {error}</div>;
+    return (
+      <div className="text-center py-20">
+        <div className="bg-red-400/10 border border-red-400/20 rounded-lg p-6 max-w-md mx-auto">
+          <p className="text-red-400 font-medium">Error loading projects</p>
+          <p className="text-sm text-gray-400 mt-2">{error}</p>
+          <p className="text-sm text-gray-400 mt-2">
+            Showing fallback projects instead.
+          </p>
+        </div>
+        <div className="mt-8">
+          <ProjectContainer>
+            {fallbackProjects.map((project, index) => (
+              <ProjectCard
+                key={index}
+                id={project.id}
+                title={project.title}
+                description={project.description}
+                status={project.status}
+              />
+            ))}
+          </ProjectContainer>
+        </div>
+      </div>
+    );
   }
 
   const projectCards = projectsToDisplay.map((project, index) => (
@@ -74,10 +153,12 @@ function Projects() {
   ));
 
   return (
-    <>
-      <h1 className="text-4xl text-center pb-10 pt-10">My projects</h1>
+    <div className="max-w-7xl mx-auto px-4">
+      <h1 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
+        My Projects
+      </h1>
       <ProjectContainer>{projectCards}</ProjectContainer>
-    </>
+    </div>
   );
 }
 

@@ -1,26 +1,31 @@
-import { Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects/Projects";
-import ProjectDetails from "./pages/Projects/ProjectDetail";
-import NotFound from "./pages/NotFound";
-
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 
 function App() {
   return (
-    <>
+    <div className="min-h-screen bg-gray-900">
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectDetails />} />
-        <Route path="/*" element={<NotFound />} />
-      </Routes>
+      <main>
+        {/* Home Section */}
+        <section id="home" className="min-h-screen">
+          <Home />
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="min-h-screen py-20">
+          <About />
+        </section>
+
+        {/* Projects Section */}
+        <section id="projects" className="min-h-screen py-20">
+          <Projects />
+        </section>
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
 
