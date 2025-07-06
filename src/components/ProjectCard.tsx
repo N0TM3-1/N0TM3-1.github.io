@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 interface ProjectData {
