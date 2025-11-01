@@ -88,13 +88,7 @@ function Projects() {
       title: "Portfolio Website",
       description: "This personal portfolio built with React and TypeScript",
       status: true,
-    },
-    {
-      id: 3,
-      title: "Future Project",
-      description: "An exciting project currently in development",
-      status: false,
-    },
+    }
   ];
 
   const projectsToDisplay = projects.length > 0 ? projects : fallbackProjects;
